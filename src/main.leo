@@ -26,7 +26,7 @@ program token.aleo {
     async constructor() {}
 
 
-
+    transition main(){}
 
 
     /*
@@ -69,22 +69,19 @@ program token.aleo {
     
     ====================================================================================================================  
     */
-    async transition mint_private(
-        private recipient: address, 
-        private amount: u64
-    ) -> (Token,Future) {
-        // TODO: Fill in here
 
-    }
-    async function mint_private_onchain(
-        address_check : Future
-    ){
-        // TODO: Fill in here
-    }
+    // async transition mint_private(
+    //     private recipient: address, 
+    //     private amount: u64
+    // ) -> (Token,Future) {
+    //     // TODO: Fill in here
 
-
-
-
+    // }
+    // async function mint_private_onchain(
+    //     address_check : Future
+    // ){
+    //     // TODO: Fill in here
+    // }
 
     /*
     ====================================================================================================================
@@ -106,24 +103,21 @@ program token.aleo {
     
     ====================================================================================================================  
     */
-    async transition transfer_public(
-        public recipient: address, 
-        public amount: u64
-    ) -> Future {
-        // TODO: Fill in here
-    }
-    async function transfer_public_onchain(
-        public sender: address, 
-        public recipient: address, 
-        public amount: u64,
-        public address_check : Future
-    ) {
-        // TODO: Fill in here
-    }
 
-
-
-
+    // async transition transfer_public(
+    //     public recipient: address, 
+    //     public amount: u64
+    // ) -> Future {
+    //     // TODO: Fill in here
+    // }
+    // async function transfer_public_onchain(
+    //     public sender: address, 
+    //     public recipient: address, 
+    //     public amount: u64,
+    //     public address_check : Future
+    // ) {
+    //     // TODO: Fill in here
+    // }
 
     /*
     ====================================================================================================================
@@ -146,23 +140,20 @@ program token.aleo {
     
     ====================================================================================================================  
     */
-    async transition transfer_private(
-        private sender: Token, 
-        private recipient: address, 
-        private amount: u64
-    ) -> (Token, Token, Future) {
-        // TODO: Fill in here
-    }
 
-    async function transfer_private_onchain(
-        public address_check : Future
-    ){
-        // TODO: Fill in here
-    }
+    // async transition transfer_private(
+    //     private sender: Token, 
+    //     private recipient: address, 
+    //     private amount: u64
+    // ) -> (Token, Token, Future) {
+    //     // TODO: Fill in here
+    // }
 
-
-
-
+    // async function transfer_private_onchain(
+    //     public address_check : Future
+    // ){
+    //     // TODO: Fill in here
+    // }
 
     /*
     ====================================================================================================================
