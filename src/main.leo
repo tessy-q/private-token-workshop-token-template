@@ -47,27 +47,9 @@ program token.aleo {
     
     ====================================================================================================================  
     */
-    async transition mint_public(
-        public recipient: address, 
-        public amount: u64
-    ) -> Future {
-        let address_check : Future = workshop_ofac.aleo/address_check(recipient);
 
-        // TODO: Fill in here
-    }
-
-    async function mint_public_onchain(
-        public recipient: address, 
-        public amount: u64,
-        public address_check : Future
-    ) {
-        address_check.await();
-
-        // TODO: Fill in here
-    }
-
-
-
+    
+    //                                       CODE-ALONG DURING WORKSHOP
 
 
     /*
