@@ -14,7 +14,7 @@ TODO:
 
 ====================================================================================================================  
 */
-program token.aleo {
+program tessyq_token.aleo {
     mapping balances: address => u64;  // On-chain mapping between user addresses and public token balances
 
     record Token {
@@ -26,7 +26,7 @@ program token.aleo {
     async constructor() {}
 
 
-    transition dummy(){}
+
 
 
     /*
@@ -47,9 +47,31 @@ program token.aleo {
     
     ====================================================================================================================  
     */
+    async transition mint_public(
+        public recipient: address, 
+        public amount: u64
+    ) -> Future {
+        let address_check : Future = workshop_ofac.aleo/address_check(recipient);
 
-    
-    //                                       CODE-ALONG DURING WORKSHOP
+        // TODO: Fill in here
+        return mint_public_onchain(recipient, amount, address_check);
+
+    }
+
+    async function mint_public_onchain(
+        public recipient: address, 
+        public amount: u64,
+        public address_check : Future
+    ) {
+        address_check.await();
+
+        // TODO: Fill in here
+        let current_amount: u64 = Mapping::get_or_use(balances, recipient, 0u64 );
+        Mapping::set(balances, recipient, current_amount + amount);
+    }
+
+
+
 
 
     /*
@@ -69,19 +91,29 @@ program token.aleo {
     
     ====================================================================================================================  
     */
+    async transition mint_private(
+        private recipient: address, 
+        private amount: u64
+    ) -> (Token,Future) {
+        // TODO: Fill in here
+        let address_check:Future = workshop_ofac.aleo/address_check(recipient);
+        let token: Token = Token{
+            owner:recipient,
+            amount:amount,
+        };
+        return (token, mint_private_onchain(address_check));
 
-    // async transition mint_private(
-    //     private recipient: address, 
-    //     private amount: u64
-    // ) -> (Token,Future) {
-    //     // TODO: Fill in here
+    }
+    async function mint_private_onchain(
+        address_check : Future
+    ){
+        // TODO: Fill in here
+        address_check.await();
+    }
 
-    // }
-    // async function mint_private_onchain(
-    //     address_check : Future
-    // ){
-    //     // TODO: Fill in here
-    // }
+
+
+
 
     /*
     ====================================================================================================================
@@ -103,21 +135,32 @@ program token.aleo {
     
     ====================================================================================================================  
     */
+    async transition transfer_public(
+        public recipient: address, 
+        public amount: u64
+    ) -> Future {
+        // TODO: Fill in here
+        let address_check:Future = workshop_ofac.aleo/address_check(recipient);
 
-    // async transition transfer_public(
-    //     public recipient: address, 
-    //     public amount: u64
-    // ) -> Future {
-    //     // TODO: Fill in here
-    // }
-    // async function transfer_public_onchain(
-    //     public sender: address, 
-    //     public recipient: address, 
-    //     public amount: u64,
-    //     public address_check : Future
-    // ) {
-    //     // TODO: Fill in here
-    // }
+        return transfer_public_onchain(self.signer, recipient, amount, address_check);
+    }
+    async function transfer_public_onchain(
+        public sender: address, 
+        public recipient: address, 
+        public amount: u64,
+        public address_check : Future
+    ) {
+        // TODO: Fill in here
+        address_check.await();
+        let sender_amount: u64 = Mapping::get_or_use(balances, sender, 0u64);
+        Mapping::set(balances, sender, sender_amount - amount);
+        let reciever_amount:u64 = Mapping::get_or_use(balances, recipient, 0u64);
+        Mapping::set(balances, recipient, reciever_amount + amount);
+    }
+
+
+
+
 
     /*
     ====================================================================================================================
@@ -140,20 +183,39 @@ program token.aleo {
     
     ====================================================================================================================  
     */
+    async transition transfer_private(
+        private sender: Token, 
+        private recipient: address, 
+        private amount: u64
+    ) -> (Token, Token, Future) {
+        // TODO: Fill in here
+        let address_check: Future = workshop_ofac.aleo/address_check(recipient);
 
-    // async transition transfer_private(
-    //     private sender: Token, 
-    //     private recipient: address, 
-    //     private amount: u64
-    // ) -> (Token, Token, Future) {
-    //     // TODO: Fill in here
-    // }
+        let difference: u64 = sender.amount - amount;
 
-    // async function transfer_private_onchain(
-    //     public address_check : Future
-    // ){
-    //     // TODO: Fill in here
-    // }
+        let remaining: Token = Token {
+            owner: sender.owner,
+            amount: difference
+        };
+
+        let transferred: Token = Token {
+            owner: recipient,
+            amount: amount,
+        };
+
+        return (remaining, transferred, transfer_private_onchain(address_check));
+    }
+
+    async function transfer_private_onchain(
+        public address_check : Future
+    ){
+        // TODO: Fill in here
+        address_check.await();
+    }
+
+
+
+
 
     /*
     ====================================================================================================================
